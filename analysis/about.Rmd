@@ -1,0 +1,12 @@
+---
+title: "About"
+output:
+  workflowr::wflow_html:
+    toc: false
+editor_options:
+  chunk_output_type: console
+---
+
+Welcome to the **Marine Genomics** course website
+
+This course provides a practical and conceptual introduction to marine genomics, from genome resources to population and seascape genomics, with a strong emphasis on hands-on data analysis using real-world datasets.

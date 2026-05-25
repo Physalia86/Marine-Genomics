@@ -1,0 +1,21 @@
+name: Marine-Genomics
+output_dir: ../docs
+navbar:
+  title: Marine-Genomics
+  left:
+  - text: Home
+    href: index.html
+  - text: About
+    href: about.html
+  - text: License
+    href: license.html
+  right:
+  - icon: fab fa-github
+    text: Source code
+    href: https://github.com/Physalia86/Marine-Genomics
+output:
+  workflowr::wflow_html:
+    toc: yes
+    toc_float: yes
+    theme: cosmo
+    highlight: textmate
