@@ -70,5 +70,3 @@ This course provides a practical and conceptual introduction to marine genomics,
 - Interpretation and discussion of results  
 
 ---
-
-TEST TEST
