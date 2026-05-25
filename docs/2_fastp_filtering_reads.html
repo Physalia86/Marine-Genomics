@@ -11,7 +11,7 @@
 
 
 
-<title>Logging on</title>
+<title>Filtering reads with fastp</title>
 
 <script src="site_libs/header-attrs-2.31/header-attrs.js"></script>
 <script src="site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
@@ -273,7 +273,7 @@ $(document).ready(function () {
 
 
 
-<h1 class="title toc-ignore">Logging on</h1>
+<h1 class="title toc-ignore">Filtering reads with fastp</h1>
 
 </div>
 
@@ -306,7 +306,7 @@ class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span>
 </p>
 <p>
 <strong>Checks:</strong> <span
-class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> 7
+class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> 2
 <span class="glyphicon glyphicon-exclamation-sign text-danger"
 aria-hidden="true"></span> 0
 </p>
@@ -343,90 +343,6 @@ class="panel-collapse collapse">
 <p>Great! Since the R Markdown file has been committed to the Git
 repository, you know the exact version of the code that produced these
 results.</p>
-</div>
-</div>
-</div>
-<div class="panel panel-default">
-<div class="panel-heading">
-<p class="panel-title">
-<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongEnvironmentstrongempty">
-<span class="glyphicon glyphicon-ok text-success"
-aria-hidden="true"></span> <strong>Environment:</strong> empty </a>
-</p>
-</div>
-<div id="strongEnvironmentstrongempty" class="panel-collapse collapse">
-<div class="panel-body">
-<p>Great job! The global environment was empty. Objects defined in the
-global environment can affect the analysis in your R Markdown file in
-unknown ways. For reproduciblity it’s best to always run the code in an
-empty environment.</p>
-</div>
-</div>
-</div>
-<div class="panel panel-default">
-<div class="panel-heading">
-<p class="panel-title">
-<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongSeedstrongcodesetseed20260525code">
-<span class="glyphicon glyphicon-ok text-success"
-aria-hidden="true"></span> <strong>Seed:</strong>
-<code>set.seed(20260525)</code> </a>
-</p>
-</div>
-<div id="strongSeedstrongcodesetseed20260525code"
-class="panel-collapse collapse">
-<div class="panel-body">
-<p>The command <code>set.seed(20260525)</code> was run prior to running
-the code in the R Markdown file. Setting a seed ensures that any results
-that rely on randomness, e.g. subsampling or permutations, are
-reproducible.</p>
-</div>
-</div>
-</div>
-<div class="panel panel-default">
-<div class="panel-heading">
-<p class="panel-title">
-<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongSessioninformationstrongrecorded">
-<span class="glyphicon glyphicon-ok text-success"
-aria-hidden="true"></span> <strong>Session information:</strong>
-recorded </a>
-</p>
-</div>
-<div id="strongSessioninformationstrongrecorded"
-class="panel-collapse collapse">
-<div class="panel-body">
-<p>Great job! Recording the operating system, R version, and package
-versions is critical for reproducibility.</p>
-</div>
-</div>
-</div>
-<div class="panel panel-default">
-<div class="panel-heading">
-<p class="panel-title">
-<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongCachestrongnone">
-<span class="glyphicon glyphicon-ok text-success"
-aria-hidden="true"></span> <strong>Cache:</strong> none </a>
-</p>
-</div>
-<div id="strongCachestrongnone" class="panel-collapse collapse">
-<div class="panel-body">
-<p>Nice! There were no cached chunks for this analysis, so you can be
-confident that you successfully produced the results during this
-run.</p>
-</div>
-</div>
-</div>
-<div class="panel panel-default">
-<div class="panel-heading">
-<p class="panel-title">
-<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongFilepathsstrongrelative">
-<span class="glyphicon glyphicon-ok text-success"
-aria-hidden="true"></span> <strong>File paths:</strong> relative </a>
-</p>
-</div>
-<div id="strongFilepathsstrongrelative" class="panel-collapse collapse">
-<div class="panel-body">
-<p>Great job! Using relative paths to the files within your workflowr
-project makes it easier to run your code on other machines.</p>
 </div>
 </div>
 </div>
@@ -483,11 +399,12 @@ have uncommitted changes.
 <div id="versions" class="tab-pane fade">
 <p>
 These are the previous versions of the repository in which changes were
-made to the R Markdown (<code>analysis/0_Logging_on.Rmd</code>) and HTML
-(<code>docs/0_Logging_on.html</code>) files. If you’ve configured a
-remote Git repository (see <code>?wflow_git_remote</code>), click on the
-hyperlinks in the table below to view the files as they were in that
-past version.
+made to the R Markdown
+(<code>analysis/2_fastp_filtering_reads.Rmd</code>) and HTML
+(<code>docs/2_fastp_filtering_reads.html</code>) files. If you’ve
+configured a remote Git repository (see <code>?wflow_git_remote</code>),
+click on the hyperlinks in the table below to view the files as they
+were in that past version.
 </p>
 <div class="table-responsive">
 <table class="table table-condensed table-hover">
@@ -535,131 +452,113 @@ Add additional files
 </div>
 </div>
 </div>
-<p>Typically when working in bioinformatics with large datasets we would
-log into a computing cluster such as the one we have prepared for this
-course. Outside the course, you would work on the cluster/server of your
-home institution and log in in a very similar way as we show below. You
-likely would not need a keyfile for your home institution, but would
-have a password instead. How do we log in for the course?</p>
-<div id="logging-on" class="section level4">
-<h4>Logging on</h4>
-<p>If you are using a Mac or Linux machine, you will need to open a
-<code>terminal</code> window. If you are using a Windows machine, start
-<a href="https://mobaxterm.mobatek.net/">MobaXterm</a> or “Ubuntu on
-Windows” to get a <code>terminal</code>. For MobaXterm users, we
-recommend to go to “Settings”, then “Configuration” and change the
-“Persistent home directory” to a directory of your choice. In the same
-Configuration window, also go to “SSH” and tick the box “SSH
-keepalive”.</p>
-<p>To connect to the Amazon cloud, we use the command
-<code>ssh</code>.</p>
-<p><code>ssh</code> stands for <a
-href="https://en.wikipedia.org/wiki/Secure_Shell">secure shell</a> and
-is a way of interacting with remote servers. You will need to log in to
-the cluster using a keyfile that has been generated for you and sent via
-email.</p>
-<p>To log on, we will need the keyfile you got from Physalia. If this
-was the cluster/server of your institution, you would not need that but
-use a password instead.</p>
-<p>First, copy the keyfile into your home directory (change the number
-(123) to the user number assigned to you).</p>
-<pre class="shell"><code>cp c123.pem ~</code></pre>
-<p>If you get an error about permissions, try the following:</p>
-<pre class="shell"><code>chmod go= c123.pem
-chmod -R u+x c123.pem</code></pre>
-<p>Then you should be able to log in with <code>ssh</code> whatever your
-working directory is. You need to provide <code>ssh</code> with the path
-to your key file, which you can do with the <code>-i</code> flag. This
-basically points to your identity file or keyfile (here shown for user
-123). For example:</p>
-<pre class="shell"><code>ssh -i &quot;~/c123.pem&quot; user123@54.245.175.86</code></pre>
-<p>Of course you will need to change the log in credentials shown here
-(i.e. the username and keyfile name) with your own. <strong>Also be
-aware that the cluster IP address will change everyday</strong>. We will
-update you on this each day.</p>
-<p>The first time logging in you will be prompted to accept an RSA key -
-just type <code>yes</code>!</p>
-</div>
-<div id="downloading-and-uploading-files" class="section level4">
-<h4>Downloading and uploading files</h4>
-<p>Occassionally, we will need to shift files between the cluster and
-our local machines. To do this, we can use a command utility called
-<code>scp</code> or <a
-href="https://en.wikipedia.org/wiki/Secure_copy">secure copy</a>. It
-works in a similar way to <code>ssh</code>. Let’s try making a dummyfile
-in our local home directory and then uploading it to our home directory
-on the cluster.</p>
-<pre class="shell"><code># make a file
-touch test_file
-# upload a file from your computer to the cluster
-scp -i &quot;~/c123.pem&quot; test_file user123@54.245.175.86:~/</code></pre>
-<p>Just to break this down a little we are simply copying a file,
-<code>test_file</code> in this case to the cluster. After the
-<code>:</code> symbol, we are specifying where on the cluster we are
-placing the file, here we use <code>~/</code> to specify the home
+<p>Sometimes Illumina adapter sequences are still present in some reads.
+This is because adapters can form adapter dimers and then one of them
+gets sequenced or if a DNA fragment is shorter than the read length, the
+sequencer continues to “read-through” into the adapter at the end of the
+DNA fragment.</p>
+<p>In the latter case the forward and the reverse read will contain
+adapter sequences, which is called a “palindrome”. While a full adapter
+sequence can be identified relatively easily, reliably identifying a
+short partial adapter sequence is inherently difficult. However, if
+there is a short partial adapter present at the end of the forward read
+and the beginning of the reverse read, that is a good sign for a
+“palindrome” sequence.</p>
+<p>To anyone using Novaseq, or any NextSeq Illumina technology you
+should also watch out for overrepresented polyG sequences (weirdly long
+sequences of GGGGGGG), particularly in the reverse reads. This is a
+problem of the latest Illumina instruments that use a <a
+href="https://sequencing.qcfail.com/articles/illumina-2-colour-chemistry-can-overcall-high-confidence-g-bases/">two-colour
+system</a> to infer the bases. A lack of signal is called as G with high
+confidence. These polyG tails need to be removed or the read will not
+map well to the reference genome.</p>
+<p>Furthermore, reads that start or end with very low quality can be
+aligned better if the bad quality parts are trimmed off. We will use <a
+href="https://github.com/OpenGene/fastp">fastp</a> to fix all of these
+issues. fastp can remove low quality reads, adapters and polyG tails. It
+even automatically detects what adapters were used and even better… it’s
+extremely fast!</p>
+<p>There are also other excellent read filtering and trimming tools such
+as <a
+href="https://speciationgenomics.github.io/Trimmomatic">Trimmomatic</a>
+or the fast tool <a
+href="https://academic.oup.com/bioinformatics/article/36/11/3561/5803071">Ktrim</a>.
+However, we will use fastp today because of speed and simplicity. It
+also generates a html file that shows the read quality before and after
+filtering.</p>
+<pre class="shell"><code>
+# Check the options of fastpv - to make sure it works
+fastp -h
+
+# Now let&#39;s again make a folder to work in
+cd ~
+mkdir trim_reads
+cd trim_reads</code></pre>
+<p>Next we set up some variables to make our coding easier.</p>
+<pre class="shell"><code>DATA_DIR=/home/data/day2/raw_reads_full/
+FORWARD=&quot;PPLAT_F_ARK_2015_01_ERR3898702_1.fastq.gz&quot;
+REVERSE=&quot;PPLAT_F_ARK_2015_01_ERR3898702_2.fastq.gz&quot;</code></pre>
+<p>With this in place, we can copy our files to our working
 directory.</p>
-<p>Copying files back on to our local machine is just as
-straightforward. You can do that like so:</p>
-<pre class="shell"><code># download a file from the cluster to your computer
-scp -i &quot;~/c123.pem&quot; user123@54.245.175.86:~/test_file ./</code></pre>
-<p>Where here all we did was use <code>scp</code> with the cluster
-address first and the location (our working directory) second -
-i.e. <code>./</code></p>
+<pre class="shell"><code># Let&#39;s get the wgs read files:
+cp $DATA_DIR/$FORWARD ./
+cp $DATA_DIR/$REVERSE ./</code></pre>
+<p>With our files in place, we are ready to run fastp:</p>
+<pre class="shell"><code># Run fastp
+fastp --in1 $FORWARD --in2 $REVERSE \
+--out1 ${FORWARD%_1.*}_trim_1.fastq.gz --out2 ${REVERSE%_2.*}_trim_2.fastq.gz \
+-l 50 -h wgs.html &amp;&gt; filter.log</code></pre>
+<p>Note <code>&amp;&gt;</code> redirects the information on what it did
+into the file <code>filter.log</code> (both stderror and stdout are
+written into this file).</p>
+<p>Next we can look at the files produced and investigate the
+output.</p>
+<pre class="shell"><code># Let&#39;s have a look at what files fastp produced:
+ls
+# You can see that it produced the two output files we specified and also an html and a json file which shows some quality information</code></pre>
+<div id="parameters-specified-here" class="section level3">
+<h3>Parameters specified here:</h3>
+<ul>
+<li>–in1 and –in2: specify your files of forward (1) reads and of the
+reverse (2) reads.</li>
+<li>–out1 and –out2: specify the output files for forward and reverse
+reads that are still Paired.</li>
+<li>-l 50: this specifies that if a read is shorter than 50 basepairs
+after all filters, it should be removed.</li>
+<li>-h: specifies name for the html file with plots showing the read
+quality before and after filtering</li>
+</ul>
 </div>
-<div id="making-life-a-bit-easier" class="section level4">
-<h4>Making life a bit easier</h4>
-<p>If you are logging in and copying from a cluster regularly, it is
-sometimes good to use an <code>ssh</code> alias. Because the cluster IP
-address changes everyday, we will not be using these during the course.
-However, if you would like some information on how to set them up, see
-<a
-href="https://markravinet.github.io/CEES_tips_&amp;_tricks.html">here</a></p>
-<br>
-<p>
-<button type="button" class="btn btn-default btn-workflowr btn-workflowr-sessioninfo" data-toggle="collapse" data-target="#workflowr-sessioninfo" style="display: block;">
-<span class="glyphicon glyphicon-wrench" aria-hidden="true"></span>
-Session information
-</button>
-</p>
-<div id="workflowr-sessioninfo" class="collapse">
-<pre class="r"><code>sessionInfo()</code></pre>
-<pre><code>R version 4.6.0 (2026-04-24)
-Platform: aarch64-apple-darwin23
-Running under: macOS Sequoia 15.7.3
-
-Matrix products: default
-BLAS:   /Library/Frameworks/R.framework/Versions/4.6/Resources/lib/libRblas.0.dylib 
-LAPACK: /Library/Frameworks/R.framework/Versions/4.6/Resources/lib/libRlapack.dylib;  LAPACK version 3.12.1
-
-locale:
-[1] en_US.UTF-8/en_US.UTF-8/en_US.UTF-8/C/en_US.UTF-8/en_US.UTF-8
-
-time zone: Europe/Oslo
-tzcode source: internal
-
-attached base packages:
-[1] stats     graphics  grDevices utils     datasets  methods   base     
-
-other attached packages:
- [1] lubridate_1.9.5 forcats_1.0.1   stringr_1.6.0   dplyr_1.2.1    
- [5] purrr_1.2.2     readr_2.2.0     tidyr_1.3.2     tibble_3.3.1   
- [9] ggplot2_4.0.3   tidyverse_2.0.0 workflowr_1.7.2
-
-loaded via a namespace (and not attached):
- [1] sass_0.4.10        generics_0.1.4     stringi_1.8.7      hms_1.1.4         
- [5] digest_0.6.39      magrittr_2.0.5     timechange_0.4.0   evaluate_1.0.5    
- [9] grid_4.6.0         RColorBrewer_1.1-3 fastmap_1.2.0      rprojroot_2.1.1   
-[13] jsonlite_2.0.0     processx_3.9.0     whisker_0.4.1      promises_1.5.0    
-[17] httr_1.4.8         scales_1.4.0       jquerylib_0.1.4    cli_3.6.6         
-[21] rlang_1.2.0        withr_3.0.2        cachem_1.1.0       yaml_2.3.12       
-[25] otel_0.2.0         tools_4.6.0        tzdb_0.5.0         httpuv_1.6.17     
-[29] vctrs_0.7.3        R6_2.6.1           lifecycle_1.0.5    git2r_0.36.2      
-[33] fs_2.1.0           pkgconfig_2.0.3    callr_3.7.6        pillar_1.11.1     
-[37] bslib_0.11.0       later_1.4.8        gtable_0.3.6       glue_1.8.1        
-[41] Rcpp_1.1.1-1.1     xfun_0.57          tidyselect_1.2.1   rstudioapi_0.18.0 
-[45] knitr_1.51         farver_2.1.2       htmltools_0.5.9    rmarkdown_2.31    
-[49] compiler_4.6.0     getPass_0.2-4      S7_0.2.2          </code></pre>
+<div id="polyg-tail-trimming" class="section level3">
+<h3>PolyG tail trimming</h3>
+<p>This feature removes the polyG tails that arise from lack of signal
+in NextSeq/NovaSeq technologies. It is enabled for Nextseq/Novaseq data
+by default, and you can specify -g to enable it for any data, or specify
+-G to disable it.</p>
 </div>
+<div id="removal-of-adapter-sequences" class="section level3">
+<h3>Removal of adapter sequences</h3>
+<p>Adapter trimming is enabled by default, but you can disable it with
+-A. Adapter sequences can be automatically detected for both PE/SE
+data.</p>
+</div>
+<div id="length-filter" class="section level3">
+<h3>Length filter</h3>
+<p>Reads below the length threshold (e.g. due to adapter removal) are
+removed. Length filtering is enabled by default. The minimum length
+requirement is specified with -l.</p>
+</div>
+<div id="quality-filtering" class="section level3">
+<h3>Quality filtering</h3>
+<p>Quality filtering is enabled by default, but you can disable it with
+-Q. Currently fastp supports filtering by limiting the number of
+uncalled (N) bases (-n, Default 5) and the percentage of unqualified
+bases. To filter reads by its percentage of unqualified bases, two
+options should be provided: * -q : Quality threshold per base required.
+Default: 15, which means that a Phred quality score of at least 15 is
+required * -u : Percent of bases allowed to be below the quality
+threshold to keep the read (0~100). Default 40 means 40% bases can fail
+the quality threshold. If more bases fail, the read is removed.</p>
 </div>
 </div>
 </div>

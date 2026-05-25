@@ -27,8 +27,8 @@ Next we will set some variables, to make things easier to work with in our scrip
 First we set the directory on the cluster whwere our data is as `DATA_DIR`. Then we set the name of the fastq file that we will work with as the variable `FILE`. 
 
 ```shell
-FILE="wgs.R1.fastq.gz"
-DATA_DIR=/home/data/day1/fastq
+FILE="PPLAT_F_ARK_2015_01_ERR3898702_1.fastq.gz"
+DATA_DIR=/home/data/day2/raw_reads_full/
 ```
 
 This makes it very straighforward to copy over our data like so:
@@ -86,7 +86,7 @@ We should now also run fastqc on the reverse reads. As we do not need copies of 
 
 ```shell
 # Reverse reads
-FILE=wgs.R2.fastq.gz
+FILE=PPLAT_F_ARK_2015_01_ERR3898702_2.fastq.gz
 fastqc -o ./ ${DATA_DIR}/$$FILE
 ```
 

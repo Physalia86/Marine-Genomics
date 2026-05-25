@@ -18,8 +18,16 @@ This course provides a practical and conceptual introduction to marine genomics,
 
 ## Course resources
 
+### Day 1
+
 - [How to log on](0_Logging_on.html)
 - [Exploring raw reads](1_exploring_raw_reads.html)
+- [Filtering reads with fastp](2_fastp_filtering_reads.html)
+- [Mapping to a reference genome](3_mapping_to_a_reference_genome.html)
+- [Variant calling](4_variant_calling.html)
+- [Filtering variants](5_filtering_variants.html)
+
+### Day 2
 
 
 ## 🧭 Course Schedule

@@ -1,0 +1,1138 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+
+
+
+<title>Filtering and handling vcfs</title>
+
+<script src="site_libs/header-attrs-2.31/header-attrs.js"></script>
+<script src="site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="site_libs/bootstrap-3.3.5/css/cosmo.min.css" rel="stylesheet" />
+<script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<style>h1 {font-size: 34px;}
+       h1.title {font-size: 38px;}
+       h2 {font-size: 30px;}
+       h3 {font-size: 24px;}
+       h4 {font-size: 18px;}
+       h5 {font-size: 16px;}
+       h6 {font-size: 12px;}
+       code {color: inherit; background-color: rgba(0, 0, 0, 0.04);}
+       pre:not([class]) { background-color: white }</style>
+<script src="site_libs/navigation-1.1/tabsets.js"></script>
+<link href="site_libs/highlightjs-9.12.0/textmate.css" rel="stylesheet" />
+<script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
+
+<link rel="icon" href="https://github.com/workflowr/workflowr-assets/raw/main/img/reproducible.png">
+<!-- Add a small amount of space between sections. -->
+<style type="text/css">
+div.section {
+  padding-top: 12px;
+}
+</style>
+
+
+
+<style type="text/css">
+  code{white-space: pre-wrap;}
+  span.smallcaps{font-variant: small-caps;}
+  span.underline{text-decoration: underline;}
+  div.column{display: inline-block; vertical-align: top; width: 50%;}
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+  ul.task-list{list-style: none;}
+    </style>
+
+<style type="text/css">code{white-space: pre;}</style>
+<script type="text/javascript">
+if (window.hljs) {
+  hljs.configure({languages: []});
+  hljs.initHighlightingOnLoad();
+  if (document.readyState && document.readyState === "complete") {
+    window.setTimeout(function() { hljs.initHighlighting(); }, 0);
+  }
+}
+</script>
+
+
+
+
+
+
+
+
+
+<style type = "text/css">
+.main-container {
+  max-width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+}
+img {
+  max-width:100%;
+}
+.tabbed-pane {
+  padding-top: 12px;
+}
+.html-widget {
+  margin-bottom: 20px;
+}
+button.code-folding-btn:focus {
+  outline: none;
+}
+summary {
+  display: list-item;
+}
+details > summary > p:only-child {
+  display: inline;
+}
+pre code {
+  padding: 0;
+}
+</style>
+
+
+<style type="text/css">
+.dropdown-submenu {
+  position: relative;
+}
+.dropdown-submenu>.dropdown-menu {
+  top: 0;
+  left: 100%;
+  margin-top: -6px;
+  margin-left: -1px;
+  border-radius: 0 6px 6px 6px;
+}
+.dropdown-submenu:hover>.dropdown-menu {
+  display: block;
+}
+.dropdown-submenu>a:after {
+  display: block;
+  content: " ";
+  float: right;
+  width: 0;
+  height: 0;
+  border-color: transparent;
+  border-style: solid;
+  border-width: 5px 0 5px 5px;
+  border-left-color: #cccccc;
+  margin-top: 5px;
+  margin-right: -10px;
+}
+.dropdown-submenu:hover>a:after {
+  border-left-color: #adb5bd;
+}
+.dropdown-submenu.pull-left {
+  float: none;
+}
+.dropdown-submenu.pull-left>.dropdown-menu {
+  left: -100%;
+  margin-left: 10px;
+  border-radius: 6px 0 6px 6px;
+}
+</style>
+
+<script type="text/javascript">
+// manage active state of menu based on current page
+$(document).ready(function () {
+  // active menu anchor
+  href = window.location.pathname
+  href = href.substr(href.lastIndexOf('/') + 1)
+  if (href === "")
+    href = "index.html";
+  var menuAnchor = $('a[href="' + href + '"]');
+
+  // mark the anchor link active (and if it's in a dropdown, also mark that active)
+  var dropdown = menuAnchor.closest('li.dropdown');
+  if (window.bootstrap) { // Bootstrap 4+
+    menuAnchor.addClass('active');
+    dropdown.find('> .dropdown-toggle').addClass('active');
+  } else { // Bootstrap 3
+    menuAnchor.parent().addClass('active');
+    dropdown.addClass('active');
+  }
+
+  // Navbar adjustments
+  var navHeight = $(".navbar").first().height() + 15;
+  var style = document.createElement('style');
+  var pt = "padding-top: " + navHeight + "px; ";
+  var mt = "margin-top: -" + navHeight + "px; ";
+  var css = "";
+  // offset scroll position for anchor links (for fixed navbar)
+  for (var i = 1; i <= 6; i++) {
+    css += ".section h" + i + "{ " + pt + mt + "}\n";
+  }
+  style.innerHTML = "body {" + pt + "padding-bottom: 40px; }\n" + css;
+  document.head.appendChild(style);
+});
+</script>
+
+<!-- tabsets -->
+
+<style type="text/css">
+.tabset-dropdown > .nav-tabs {
+  display: inline-table;
+  max-height: 500px;
+  min-height: 44px;
+  overflow-y: auto;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.tabset-dropdown > .nav-tabs > li.active:before, .tabset-dropdown > .nav-tabs.nav-tabs-open:before {
+  content: "\e259";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li.active:before {
+  content: "\e258";
+  font-family: 'Glyphicons Halflings';
+  border: none;
+}
+
+.tabset-dropdown > .nav-tabs > li.active {
+  display: block;
+}
+
+.tabset-dropdown > .nav-tabs > li > a,
+.tabset-dropdown > .nav-tabs > li > a:focus,
+.tabset-dropdown > .nav-tabs > li > a:hover {
+  border: none;
+  display: inline-block;
+  border-radius: 4px;
+  background-color: transparent;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li {
+  display: block;
+  float: none;
+}
+
+.tabset-dropdown > .nav-tabs > li {
+  display: none;
+}
+</style>
+
+<!-- code folding -->
+
+
+
+
+</head>
+
+<body>
+
+
+<div class="container-fluid main-container">
+
+
+
+
+<div class="navbar navbar-default  navbar-fixed-top" role="navigation">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-bs-toggle="collapse" data-target="#navbar" data-bs-target="#navbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="index.html">Marine-Genomics</a>
+    </div>
+    <div id="navbar" class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+        <li>
+  <a href="index.html">Home</a>
+</li>
+<li>
+  <a href="about.html">About</a>
+</li>
+<li>
+  <a href="license.html">License</a>
+</li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        
+      </ul>
+    </div><!--/.nav-collapse -->
+  </div><!--/.container -->
+</div><!--/.navbar -->
+
+<div id="header">
+
+
+
+<h1 class="title toc-ignore">Filtering and handling vcfs</h1>
+
+</div>
+
+
+<p>
+<button type="button" class="btn btn-default btn-workflowr btn-workflowr-report" data-toggle="collapse" data-target="#workflowr-report">
+<span class="glyphicon glyphicon-list" aria-hidden="true"></span>
+workflowr <span class="glyphicon glyphicon-ok text-success"
+aria-hidden="true"></span>
+</button>
+</p>
+<div id="workflowr-report" class="collapse">
+<ul class="nav nav-tabs">
+<li class="active">
+<a data-toggle="tab" href="#summary">Summary</a>
+</li>
+<li>
+<a data-toggle="tab" href="#checks"> Checks <span
+class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span>
+</a>
+</li>
+<li>
+<a data-toggle="tab" href="#versions">Past versions</a>
+</li>
+</ul>
+<div class="tab-content">
+<div id="summary" class="tab-pane fade in active">
+<p>
+<strong>Last updated:</strong> 2026-05-25
+</p>
+<p>
+<strong>Checks:</strong> <span
+class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> 7
+<span class="glyphicon glyphicon-exclamation-sign text-danger"
+aria-hidden="true"></span> 0
+</p>
+<p>
+<strong>Knit directory:</strong> <code>Marine-Genomics/</code> <span
+class="glyphicon glyphicon-question-sign" aria-hidden="true"
+title="This is the local directory in which the code in this file was executed.">
+</span>
+</p>
+<p>
+This reproducible <a href="https://rmarkdown.rstudio.com">R Markdown</a>
+analysis was created with <a
+  href="https://github.com/workflowr/workflowr">workflowr</a> (version
+1.7.2). The <em>Checks</em> tab describes the reproducibility checks
+that were applied when the results were created. The <em>Past
+versions</em> tab lists the development history.
+</p>
+<hr>
+</div>
+<div id="checks" class="tab-pane fade">
+<div id="workflowr-checks" class="panel-group">
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRMarkdownfilestronguptodate">
+<span class="glyphicon glyphicon-ok text-success"
+aria-hidden="true"></span> <strong>R Markdown file:</strong> up-to-date
+</a>
+</p>
+</div>
+<div id="strongRMarkdownfilestronguptodate"
+class="panel-collapse collapse">
+<div class="panel-body">
+<p>Great! Since the R Markdown file has been committed to the Git
+repository, you know the exact version of the code that produced these
+results.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongEnvironmentstrongempty">
+<span class="glyphicon glyphicon-ok text-success"
+aria-hidden="true"></span> <strong>Environment:</strong> empty </a>
+</p>
+</div>
+<div id="strongEnvironmentstrongempty" class="panel-collapse collapse">
+<div class="panel-body">
+<p>Great job! The global environment was empty. Objects defined in the
+global environment can affect the analysis in your R Markdown file in
+unknown ways. For reproduciblity it’s best to always run the code in an
+empty environment.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongSeedstrongcodesetseed20260525code">
+<span class="glyphicon glyphicon-ok text-success"
+aria-hidden="true"></span> <strong>Seed:</strong>
+<code>set.seed(20260525)</code> </a>
+</p>
+</div>
+<div id="strongSeedstrongcodesetseed20260525code"
+class="panel-collapse collapse">
+<div class="panel-body">
+<p>The command <code>set.seed(20260525)</code> was run prior to running
+the code in the R Markdown file. Setting a seed ensures that any results
+that rely on randomness, e.g. subsampling or permutations, are
+reproducible.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongSessioninformationstrongrecorded">
+<span class="glyphicon glyphicon-ok text-success"
+aria-hidden="true"></span> <strong>Session information:</strong>
+recorded </a>
+</p>
+</div>
+<div id="strongSessioninformationstrongrecorded"
+class="panel-collapse collapse">
+<div class="panel-body">
+<p>Great job! Recording the operating system, R version, and package
+versions is critical for reproducibility.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongCachestrongnone">
+<span class="glyphicon glyphicon-ok text-success"
+aria-hidden="true"></span> <strong>Cache:</strong> none </a>
+</p>
+</div>
+<div id="strongCachestrongnone" class="panel-collapse collapse">
+<div class="panel-body">
+<p>Nice! There were no cached chunks for this analysis, so you can be
+confident that you successfully produced the results during this
+run.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongFilepathsstrongrelative">
+<span class="glyphicon glyphicon-ok text-success"
+aria-hidden="true"></span> <strong>File paths:</strong> relative </a>
+</p>
+</div>
+<div id="strongFilepathsstrongrelative" class="panel-collapse collapse">
+<div class="panel-body">
+<p>Great job! Using relative paths to the files within your workflowr
+project makes it easier to run your code on other machines.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrong1fab53f">
+<span class="glyphicon glyphicon-ok text-success"
+aria-hidden="true"></span> <strong>Repository version:</strong> 1fab53f
+</a>
+</p>
+</div>
+<div id="strongRepositoryversionstrong1fab53f"
+class="panel-collapse collapse">
+<div class="panel-body">
+<p>
+Great! You are using Git for version control. Tracking code development
+and connecting the code version to the results is critical for
+reproducibility.
+</p>
+<p>
+The results in this page were generated with repository version 1fab53f.
+See the <em>Past versions</em> tab to see a history of the changes made
+to the R Markdown and HTML files.
+</p>
+<p>
+Note that you need to be careful to ensure that all relevant files for
+the analysis have been committed to Git prior to generating the results
+(you can use <code>wflow_publish</code> or
+<code>wflow_git_commit</code>). workflowr only checks the R Markdown
+file, but you know if there are other scripts or data files that it
+depends on. Below is the status of the Git repository when the results
+were generated:
+</p>
+<pre><code>
+Ignored files:
+    Ignored:    .DS_Store
+
+Untracked files:
+    Untracked:  analysis/1_exploring_raw_reads.rmd
+
+</code></pre>
+<p>
+Note that any generated files, e.g. HTML, png, CSS, etc., are not
+included in this status report because it is ok for generated content to
+have uncommitted changes.
+</p>
+</div>
+</div>
+</div>
+</div>
+<hr>
+</div>
+<div id="versions" class="tab-pane fade">
+<p>
+These are the previous versions of the repository in which changes were
+made to the R Markdown (<code>analysis/5_filtering_variants.Rmd</code>)
+and HTML (<code>docs/5_filtering_variants.html</code>) files. If you’ve
+configured a remote Git repository (see <code>?wflow_git_remote</code>),
+click on the hyperlinks in the table below to view the files as they
+were in that past version.
+</p>
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+File
+</th>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+<th>
+Message
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+Rmd
+</td>
+<td>
+1fab53f
+</td>
+<td>
+markravinet
+</td>
+<td>
+2026-05-25
+</td>
+<td>
+Add additional files
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<hr>
+</div>
+</div>
+</div>
+<p>In the last session, we learned how to call variants and handle VCFs.
+In this session, we are going to focus on how to filter VCFs. This might
+seem like a relatively straightforward task but it is actually
+exceptionally important and something you should spend a lot of time
+thinking carefully about.</p>
+<div id="getting-access-to-the-real-data" class="section level3">
+<h3>Getting access to the real data</h3>
+<p>At this point our ‘toy’ dataset breaks down as we do not have enough
+reads or coverage to call a decent variant set. Recall from the last
+steps of the last tutorial that most of genotpyes were missing.</p>
+<p>To rememdy this, we are going to use a vcf we prepared on your behalf
+using the full set of reads. To get the full dataset into your
+directory, use the following commands:</p>
+<pre class="shell"><code># move to your vcf directory
+cd ~/vcf
+# copy the data file from the data directory
+cp /home/data/vcf/plaice_full.vcf.gz* ./</code></pre>
+<p>This will copy both the vcf and its index to your directory. Let’s
+take a moment to see how big the file is:</p>
+<pre class="shell"><code>ls -lh *.vcf.gz</code></pre>
+<p>You will see that this VCF is 1.5G in size, which is quite large but
+real analyses with many individuals can run to much larger sizes than
+this (for instance, we regularly work with VCF files containing hundreds
+of individuals which are &gt;300 G).</p>
+</div>
+<div id="how-many-unfiltered-variants" class="section level3">
+<h3>How many unfiltered variants?</h3>
+<p>One thing we didn’t check yet is how many variants we actually have.
+Each line in the main output of a vcf represents a single call so we can
+use the following code to work it out:</p>
+<pre class="shell"><code>bcftools view -H plaice_full.vcf.gz | wc -l</code></pre>
+<p>This command will essentially print every line of the VCF, so if your
+file is large, it will take quite a long time to run this. For this
+reason, it might be best to run it inside a screen and then we can check
+it again later.</p>
+<p>Either way, we have close to 8 million variants in our full VCF.
+That’s a substantial number! But chances are many of them are not useful
+for our analysis because they occur in too few individuals, their minor
+allele frequency is too low or they are covered by insufficient
+depth.</p>
+<p>At present, we have applied no filters at all. This is intentional -
+we want to see what happens when filters are applied. However, it is
+also a good idea to perform an initial analysis, to get an idea of how
+to set filters. However as we have just seen, it takes time to perform
+operations on a large VCF.</p>
+<p>For this reason, it is a good idea to subsample our variant calls and
+get an idea of the general distribution of a few key attributes of the
+data.</p>
+</div>
+<div id="randomly-subsampling-a-vcf" class="section level3">
+<h3>Randomly subsampling a VCF</h3>
+<p>How can we get an idea of how to set filters? We could just take the
+first 100 000 variants in our vcf and get an idea of how they look for
+some basic statistics (i.e. minor allele frequency, depth of coverage
+and so on). But would this be accurate? What if there is some bias on
+the first chromosome in the genome and everything there mapped well?</p>
+<p>A far better idea is to randomly sample your VCF. Luckily there is a
+tool to do exactly this and it is part of the extremely useful <a
+href="https://github.com/vcflib/vcflib"><code>vcflib</code>
+pipeline</a>. Using it is also very simple. Here we will use it to
+extract ~100 000 variants at random from our unfiltered VCF.</p>
+<pre class="shell"><code>bcftools view plaice_full.vcf.gz | vcfrandomsample -r 0.012 &gt; plaice_subset.vcf
+</code></pre>
+<p>Note that <code>vcfrandomsample</code> cannot handle an uncompressed
+VCF, so we first open the file using <code>bcftools</code> and then pipe
+it to the <code>vcfrandomsample</code> utility. We set only a single
+parameter, <code>-r</code> which is a bit confusingly named for the rate
+of sampling. This essentially means the fraction of variants we want to
+retain.</p>
+<p>This will give us at least 95-100 K variants, depending on the random
+seed used to start the process. This means that everyone in the class
+should get different random subsets - providing us a nice demonstration
+for the next step. Before proceeding though, we should compress and
+index our new subset VCF to make it easier to access:</p>
+<pre class="shell"><code># compress vcf
+bgzip plaice_subset.vcf
+# index vcf
+bcftools index plaice_subset.vcf.gz</code></pre>
+</div>
+<div id="generating-statistics-from-a-vcf" class="section level3">
+<h3>Generating statistics from a VCF</h3>
+<p>In order to generate statistics from our VCF and also actually later
+apply filters, we are going to use <code>vcftools</code>, <a
+href="https://vcftools.github.io/examples.html">a very useful and fast
+program for handling vcf files</a>.</p>
+<p>Determining how to set filters on a dataset is a bit of a nightmare -
+it is something newcomers (and actually experienced people too) really
+struggle with. There also isn’t always a clear answer - if you can
+justify your actions then there are often multiple solutions to how you
+set your filters. What is important is that you get to know your data
+and from that determine some sensible thresholds.</p>
+<p>Luckily, <code>vcftools</code> makes it possible to easily calculate
+these statistics. In this section, we will analyse our VCF in order to
+get a sensible idea of how to set such filtering thresholds. The main
+areas we will consider are:</p>
+<ul>
+<li><strong>Depth:</strong> You should always include a minimum depth
+filter and ideally also a maximum depth one too. Minimum depth cutoffs
+will remove false positive calls and will ensure higher quality calls
+too. A maximum cut off is important because regions with very, very high
+read depths are likely repetitive ones mapping to multiple parts of the
+genome.</li>
+<li><strong>Quality</strong> Genotype quality is also an important
+filter - essentially you should not trust any genotype with a Phred
+score below 20 which suggests a less than 99% accuracy.</li>
+<li><strong>Minor allele frequency</strong> MAF can cause big problems
+with SNP calls - and also inflate statistical estimates downstream.
+Ideally you want an idea of the distribution of your allelic frequencies
+but 0.05 to 0.10 is a reasonable cut-off. You should keep in mind
+however that some analyses, particularly demographic inference can be
+biased by MAF thresholds.</li>
+<li><strong>Missing data</strong> How much missing data are you willing
+to tolerate? It will depend on the study but typically any site with
+&gt;25% missing data should be dropped.</li>
+</ul>
+<div id="setting-up" class="section level4">
+<h4>Setting up</h4>
+<p>Before we calculate our stats, let’s make a little effort to make our
+commands simpler and also to ensure the output is written to the right
+place. First we need to make a directory for our results.</p>
+<pre class="shell"><code>mkdir ~/vcftools</code></pre>
+<p>Next we will declare to variables to save us some typing below.</p>
+<pre class="shell"><code>SUBSET_VCF=~/vcf/plaice_subset.vcf.gz
+OUT=~/vcftools/plaice_subset
+</code></pre>
+</div>
+<div id="calculate-allele-frequency" class="section level4">
+<h4>Calculate allele frequency</h4>
+<p>First we will calculate the allele frequency for each variant. The
+<code>--freq2</code> just outputs the frequencies without information
+about the alleles, <code>--freq</code> would return their identity. We
+need to add max-alleles 2 to exclude sites that have more than two
+alleles.</p>
+<pre class="shell"><code>vcftools --gzvcf $SUBSET_VCF --freq2 --out $OUT --max-alleles 2</code></pre>
+</div>
+<div id="calculate-mean-depth-per-individual" class="section level4">
+<h4>Calculate mean depth per individual</h4>
+<p>Next we calculate the mean depth of coverage per individual.</p>
+<pre class="shell"><code>vcftools --gzvcf $SUBSET_VCF --depth --out $OUT</code></pre>
+</div>
+<div id="calculate-mean-depth-per-site" class="section level4">
+<h4>Calculate mean depth per site</h4>
+<p>Similarly, we also estimate the mean depth of coverage for each
+site.</p>
+<pre class="shell"><code>vcftools --gzvcf $SUBSET_VCF --site-mean-depth --out $OUT</code></pre>
+</div>
+<div id="calculate-site-quality" class="section level4">
+<h4>Calculate site quality</h4>
+<p>We additionaly extract the site quality score for each site.</p>
+<pre class="shell"><code>vcftools --gzvcf $SUBSET_VCF --site-quality --out $OUT</code></pre>
+</div>
+<div id="calculate-proportion-of-missing-data-per-individual"
+class="section level4">
+<h4>Calculate proportion of missing data per individual</h4>
+<p>Another individual level statistic - we calculate the proportion of
+missing data per sample.</p>
+<pre class="shell"><code>vcftools --gzvcf $SUBSET_VCF --missing-indv --out $OUT</code></pre>
+</div>
+<div id="calculate-proportion-of-missing-data-per-site"
+class="section level4">
+<h4>Calculate proportion of missing data per site</h4>
+<p>And more missing data, just this time per site rather than per
+individual.</p>
+<pre class="shell"><code>vcftools --gzvcf $SUBSET_VCF --missing-site --out $OUT</code></pre>
+</div>
+<div
+id="calculate-heterozygosity-and-inbreeding-coefficient-per-individual"
+class="section level4">
+<h4>Calculate heterozygosity and inbreeding coefficient per
+individual</h4>
+<p>Computing heterozygosity and the inbreeding coefficient (F) for each
+individual can quickly highlight outlier individuals that are
+e.g. inbred (strongly negative F), suffer from high sequencing error
+problems or contamination with DNA from another individual leading to
+inflated heterozygosity (high F), or PCR duplicates or low read depth
+leading to allelic dropout and thus underestimated heterozygosity
+(stongly negative F). However, note that here we assume Hardy-Weinberg
+equilibrium. If the individuals are not sampled from the same
+population, the expected heterozygosity will be overestimated due to the
+<a
+href="https://en.wikipedia.org/wiki/Wahlund_effect">Wahlund-effect</a>.
+It may still be worth to compute heterozygosities even if the samples
+are from more than one population to check if any of the individuals
+stands out which could indicate problems.</p>
+<pre class="shell"><code>vcftools --gzvcf $SUBSET_VCF --het --out $OUT</code></pre>
+<hr />
+<p>With the statistics calculated, take a moment to have a quick look at
+the output in the <code>~/vcftools/</code> directory. We will now need
+to download our output data onto our local machines in order to work
+with R.</p>
+</div>
+</div>
+<div id="examining-statistics-in-r" class="section level2">
+<h2>Examining statistics in R</h2>
+<div id="setting-up-the-r-environment" class="section level3">
+<h3>Setting up the R environment</h3>
+<p>First load the <code>tidyverse</code> package and ensure you have
+moved the <code>vcftools</code> output into the working directory you
+are operating in. You may want to set up an RStudio Project to manage
+this analysis. See <a
+href="https://speciationgenomics.github.io/more_advanced_R/">here</a>
+for a guide on how to do this.</p>
+<pre class="r"><code># load tidyverse package
+library(tidyverse)</code></pre>
+</div>
+</div>
+<div id="variant-based-statistics" class="section level2">
+<h2>Variant based statistics</h2>
+<p>The first thing we will do is look at the statistics we generated for
+each of the variants in our subset VCF - quality, depth, missingness and
+allele frequency.</p>
+<div id="variant-quality" class="section level3">
+<h3>Variant quality</h3>
+<p>The first metric we will look at is the (Phred encoded) site quality.
+This is a measure of how much confidence we have in our variant calls.
+First of all, we read in the site quality report we generated using
+<code>vcftools</code>. We will use the <code>read_delim</code> command
+from the <code>readr</code> package (part of the the tidyverse) because
+it is more efficient for reading in large datafiles. It also allows us
+to set our own column names.</p>
+<pre class="r"><code>var_qual &lt;- read_delim(&quot;./plaice_subset.lqual&quot;, delim = &quot;\t&quot;,
+           col_names = c(&quot;chr&quot;, &quot;pos&quot;, &quot;qual&quot;), skip = 1)</code></pre>
+<p>Take a look at the data when it is read in. You will see that for
+each site in our subsampled VCF, we have extracted the site quality
+score. Now we will plot the distribution of this quality using
+<code>ggplot</code>. Usually, the <code>geom_density</code> function
+works best, but you can use <code>geom_histogram</code> too.</p>
+<pre class="r"><code>a &lt;- ggplot(var_qual, aes(qual)) + geom_density(fill = &quot;dodgerblue1&quot;, colour = &quot;black&quot;, alpha = 0.3)
+a + theme_light()</code></pre>
+<p><img src="/images/snpfilter/unnamed-chunk-3-1.png" /></p>
+<p>From this we can see that quality scores are actually very high for
+our sites. Remember that a Phred score of 30 represents a 1 in 1000
+chance that our SNP call is erroneous. Clearly most sites exceed this -
+suggesting we have a lot of high confidence calls. This is most probably
+because we have sufficient read depth (as you will see in the next
+section). However since most sites have a high quality we can see that
+filtering on this is not really going to be that useful.</p>
+<p>We recommend setting <strong>a minimum threshold of 30</strong> and
+filtering more strongly on other aspects of the data.</p>
+</div>
+<div id="variant-mean-depth" class="section level3">
+<h3>Variant mean depth</h3>
+<p>Next we will examine the mean depth for each of our variants. This is
+essentially the number of reads that have mapped to this position. The
+output we generated with <code>vcftools</code> is the mean of the read
+depth across all individuals - it is for both alleles at a position and
+is not partitioned between the reference and the alternative. First we
+read in the data.</p>
+<pre class="r"><code>var_depth &lt;- read_delim(&quot;./plaice_subset.ldepth.mean&quot;, delim = &quot;\t&quot;,
+           col_names = c(&quot;chr&quot;, &quot;pos&quot;, &quot;mean_depth&quot;, &quot;var_depth&quot;), skip = 1)</code></pre>
+<p>Again take a moment to look at the data - <code>mean_depth</code> is
+our column of interest but note that you can also get a an idea of the
+variance in depth among individuals from the <code>var_depth</code>
+column. Once again, we will use <code>ggplot</code> to look at the
+distribution of read depths.</p>
+<pre class="r"><code>a &lt;- ggplot(var_depth, aes(mean_depth)) + geom_density(fill = &quot;dodgerblue1&quot;, colour = &quot;black&quot;, alpha = 0.3)
+a + theme_light()</code></pre>
+<p><img src="/images/snpfilter/unnamed-chunk-5-1.png" /></p>
+<p>Hmm - this plot is a bit misleading because clearly, there are very
+few variants with extremely high coverage indeed. Let’s take a closer at
+the mean depth:</p>
+<pre class="r"><code>summary(var_depth$mean_depth)</code></pre>
+<pre><code>##     Min.  1st Qu.   Median     Mean  3rd Qu.     Max.
+##   0.0625  15.1250  17.8750  20.0078  20.0000 511.7500</code></pre>
+<p>Since we all took different subsets, these values will likely differ
+slightly but clearly in this case most variants have a depth of 17-20x
+whereas there are some extreme outliers. We will redraw our plot to
+exclude these and get a better idea of the distribution of mean
+depth.</p>
+<pre class="r"><code>a + theme_light() + xlim(0, 100)</code></pre>
+<p><img src="/images/snpfilter/unnamed-chunk-7-1.png" /></p>
+<p>This gives a better idea of the distribution. We could set our
+minimum coverage at the 5 and 95% quantiles but we should keep in mind
+that the more reads that cover a site, the higher confidence our
+basecall is. 10x is a good rule of thumb as a minimum cutoff for read
+depth, although if we wanted to be conservative, we could go with
+15x.</p>
+<p>What is more important here is that we set a good <strong>maximum
+depth</strong> cufoff. As the outliers show, some regions clearly have
+extremely high coverage and this likely reflects mapping/assembly errors
+and also paralogous or repetitive regions. We want to exclude these as
+they will bias our analyses. Usually a good rule of thumb is something
+the mean depth x 2 - so in this case we could set our maximum depth at
+40x.</p>
+<p><strong>So we will set our minimum depth to 10x and our maximum depth
+to 40x.</strong></p>
+</div>
+<div id="variant-missingness" class="section level3">
+<h3>Variant missingness</h3>
+<p>Next up we will look at the proportion of missingness at each
+variant. This is a measure of how many individuals <strong>lack</strong>
+a genotype at a call site. Again, we read in the data with
+<code>read_delim</code>.</p>
+<pre class="r"><code>var_miss &lt;- read_delim(&quot;./plaice_subset.lmiss&quot;, delim = &quot;\t&quot;,
+                       col_names = c(&quot;chr&quot;, &quot;pos&quot;, &quot;nchr&quot;, &quot;nfiltered&quot;, &quot;nmiss&quot;, &quot;fmiss&quot;), skip = 1)</code></pre>
+<p>Then we plot the data with <code>ggplot2</code>. One thing to keep in
+mind here is that different datasets will likely have different
+missingness profiles. RAD-sequencing data for example is likely to have
+a slightly higher mean missingnes than whole genome resequencing data
+because it is a random sample of RAD sites from each individual genome -
+meaning it is very unlikely all individuals will share exactly the same
+loci (although you would hope the majority share a subset).</p>
+<pre class="r"><code>a &lt;- ggplot(var_miss, aes(fmiss)) + geom_density(fill = &quot;dodgerblue1&quot;, colour = &quot;black&quot;, alpha = 0.3)
+a + theme_light()</code></pre>
+<p><img src="/images/snpfilter/unnamed-chunk-9-1.png" /></p>
+<p>Our plaice data has a very promising missingness profile - clearly
+most individuals have a call at almost every site. Indeed if we look at
+the summary of the data we can see this even more clearly.</p>
+<pre class="r"><code>summary(var_miss$fmiss)</code></pre>
+<pre><code>##    Min. 1st Qu.  Median    Mean 3rd Qu.    Max.
+## 0.00000 0.00000 0.00000 0.01312 0.00000 0.93750</code></pre>
+<p>Most sites have almost no missing data. Although clearly, there are
+some (as the max value shows). This means we can be quite conservative
+when we set our missing data threshold. We will remove all sites where
+<strong>over 10% of individuals are missing a genotype</strong>. One
+thing to note here is that <code>vcftools</code> inverts the direction
+of missingness, so our 10% threshold means <strong>we will tolerate the
+minimum 90% call-rate</strong> (yes this is confusing and
+counterintuitive… but that’s the way it is!). Typically 75-95% is
+used.</p>
+</div>
+<div id="minor-allele-frequency" class="section level3">
+<h3>Minor allele frequency</h3>
+<p>Last of all for our per variant analyses, we will take a look at the
+distribution of allele frequencies. This will help inform our
+minor-allele frequency (MAF) thresholds. As previously, we read in the
+data:</p>
+<pre class="r"><code>var_freq &lt;- read_delim(&quot;./plaice_subset.frq&quot;, delim = &quot;\t&quot;,
+                       col_names = c(&quot;chr&quot;, &quot;pos&quot;, &quot;nalleles&quot;, &quot;nchr&quot;, &quot;a1&quot;, &quot;a2&quot;), skip = 1)</code></pre>
+<p>However, this is simply the allele frequencies. To find the minor
+allele frequency at each site, we need to use a bit of
+<code>dplyr</code> based code.</p>
+<pre class="r"><code># find minor allele frequency
+var_freq$maf &lt;- var_freq %&gt;% select(a1, a2) %&gt;% apply(1, function(z) min(z))</code></pre>
+<p>Here we used <code>apply</code> on our allele frequencies to return
+the lowest allele frequency at each variant. We then added these to our
+dataframe as the variable <code>maf</code>. Next we will plot the
+distribution.</p>
+<pre class="r"><code>a &lt;- ggplot(var_freq, aes(maf)) + geom_density(fill = &quot;dodgerblue1&quot;, colour = &quot;black&quot;, alpha = 0.3)
+a + theme_light()</code></pre>
+<p><img src="/images/snpfilter/unnamed-chunk-13-1.png" /></p>
+<p>The distribution might look a little odd - this is partly because of
+the low number of individuals we have in the dataset (16), meaning there
+are only certain frequencies possible. Nonetheless, it is clear that a
+large number of variants have low frequency alleles. We can also look at
+the distribution in more detail:</p>
+<pre class="r"><code>summary(var_freq$maf)</code></pre>
+<pre><code>##    Min. 1st Qu.  Median    Mean 3rd Qu.    Max.
+##  0.0000  0.0625  0.1250  0.1788  0.2812  0.5000</code></pre>
+<p>The upper bound of the distribution is 0.5, which makes sense because
+if MAF was more than this, it wouldn’t be the MAF! How do we interpret
+MAF? It is an important measure because low MAF alleles may only occur
+in one or two individuals. It is possible that some of these low
+frequency alleles are in fact unreliable base calls - i.e. a source of
+error.</p>
+<p>With 16 individuals, there are 28 alleles for a given site. Therefore
+MAF = 0.04 is equivalent to a variant occurring as one allele in a
+single individual (i.e. 28 * 0.04 = 1.12). Alternatively, an MAF of 0.1
+would mean that any allele would need to occur at least twice (i.e. 28 *
+0.1 = 2.8).</p>
+<p>Setting MAF cutoffs is actually not that easy or straightforward.
+Hard MAF filtering (i.e. setting a high threshold) can severely bias
+estimation of the site frequency spectrum and cause problems with
+demographic analyses. Similarly, an excesss of low frequency,
+‘singleton’ SNPs (i.e. only occurring in one individual) can mean you
+keep many uniformative loci in your dataset that make it hard to model
+things like population structure.</p>
+<p>Usually then, it is best practice to produce one dataset with a good
+MAF threshold and keep another without any MAF filtering at all. For now
+however, we will set our <strong>MAF to 0.1</strong></p>
+</div>
+</div>
+<div id="individual-based-statistics" class="section level2">
+<h2>Individual based statistics</h2>
+<p>As well as a our per variant statistics we generated earlier, we also
+calculated some individual metrics too. WE can look at the distribution
+of these to get an idea whether some of our individuals have not
+sequenced or mapped as well as others. This is good practice to do with
+a new dataset. A lot of these statistics can be compared to other
+measures generated from the data (i.e. principal components as a measure
+of population structure) to see if they drive any apparent patterns in
+the data.</p>
+<div id="mean-depth-per-individual" class="section level3">
+<h3>Mean depth per individual</h3>
+<p>First we will look at the distribution of mean depth among
+individuals. We read the data in with <code>read_delim</code>:</p>
+<pre class="r"><code>ind_depth &lt;- read_delim(&quot;./plaice_subset.idepth&quot;, delim = &quot;\t&quot;,
+                        col_names = c(&quot;ind&quot;, &quot;nsites&quot;, &quot;depth&quot;), skip = 1)</code></pre>
+<p>Then we plot the distribution as a histogram using
+<code>ggplot</code> and <code>geom_hist</code>.</p>
+<pre class="r"><code>a &lt;- ggplot(ind_depth, aes(depth)) + geom_histogram(fill = &quot;dodgerblue1&quot;, colour = &quot;black&quot;, alpha = 0.3)
+a + theme_light()</code></pre>
+<p><img src="/images/snpfilter/unnamed-chunk-16-1.png" /></p>
+<p>Because we are only plotting data for 16 individuals, the plot looks
+a little disjointed. While there is some evidence that some individuals
+were sequenced to a higher depth than others, there are no extreme
+outliers. So this doesn’t suggest any issue with individual sequencing
+depth.</p>
+</div>
+<div id="proportion-of-missing-data-per-individual"
+class="section level3">
+<h3>Proportion of missing data per individual</h3>
+<p>Next we will look at the proportion of missing data per individual.
+We read in the data below:</p>
+<pre class="r"><code>ind_miss  &lt;- read_delim(&quot;./plaice_subset.imiss&quot;, delim = &quot;\t&quot;,
+                        col_names = c(&quot;ind&quot;, &quot;ndata&quot;, &quot;nfiltered&quot;, &quot;nmiss&quot;, &quot;fmiss&quot;), skip = 1)</code></pre>
+<p>This is very similar to the missing data per site. Here we will focus
+on the <code>fmiss</code> column - i.e. the proportion of missing
+data.</p>
+<pre class="r"><code>a &lt;- ggplot(ind_miss, aes(fmiss)) + geom_histogram(fill = &quot;dodgerblue1&quot;, colour = &quot;black&quot;, alpha = 0.3)
+a + theme_light()</code></pre>
+<p><img src="/images/snpfilter/unnamed-chunk-18-1.png" /></p>
+<p>Again this shows us, the proportion of missing data per individual is
+very small indeed. It ranges from 0.01-0.16, so we can safely say our
+individuals sequenced well.</p>
+</div>
+<div id="heterozygosity-and-inbreeding-coefficient-per-individual"
+class="section level3">
+<h3>Heterozygosity and inbreeding coefficient per individual</h3>
+<pre class="r"><code>ind_het &lt;- read_delim(&quot;./plaice_subset.het&quot;, delim = &quot;\t&quot;,
+           col_names = c(&quot;ind&quot;,&quot;ho&quot;, &quot;he&quot;, &quot;nsites&quot;, &quot;f&quot;), skip = 1)</code></pre>
+<pre class="r"><code>a &lt;- ggplot(ind_het, aes(f)) + geom_histogram(fill = &quot;dodgerblue1&quot;, colour = &quot;black&quot;, alpha = 0.3)
+a + theme_light()</code></pre>
+<p><img src="/images/snpfilter/unnamed-chunk-20-1.png" /></p>
+<p>All individuals have a slightly negative inbreeding coefficient
+suggesting that we observed a bit less heterozygote genotypes in these
+individuals than we would expect under Hardy-Weinberg equilibrium.
+However, here we combined samples from four species and thus violate the
+assumption of Hardy-Weinberg equilibrium. We would expect slightly
+negative inbreeding coefficients due to the Wahlund-effect. Given that
+all individuals seem to show similar inbreeding coefficients, we are
+happy to keep all of them. None of them shows high levels of allelic
+dropout (strongly negative F) or DNA contamination (highly positive
+F).</p>
+</div>
+<div id="applying-filters-to-the-vcf" class="section level3">
+<h3>Applying filters to the VCF</h3>
+<p>Now we have an idea of how to set out thresholds, we will do just
+that. First of all, we will set some simple variables in order to make
+our filtering command more straightforward.</p>
+<pre class="shell"><code>VCF_IN=~/vcf/plaice_full.vcf.gz
+VCF_OUT=~/vcf/plaice_full_filtered.vcf.gz</code></pre>
+<p>Then next we will set our chosen filters like so:</p>
+<pre class="shell"><code># set filters
+MAF=0.1
+MISS=0.9
+QUAL=30
+MIN_DEPTH=10
+MAX_DEPTH=50</code></pre>
+<p>Finally we run the following <code>vcftools</code> command on the
+data to produce a filtered vcf. We will investigate the options as the
+filtering is running.</p>
+<pre class="shell"><code># move to the vcf directory
+cd vcf
+# perform the filtering with vcftools
+vcftools --gzvcf $VCF_IN \
+--remove-indels --maf $MAF --max-missing $MISS --minQ $QUAL \
+--min-meanDP $MIN_DEPTH --max-meanDP $MAX_DEPTH \
+--minDP $MIN_DEPTH --maxDP $MAX_DEPTH --recode --stdout | gzip -c &gt; \
+$VCF_OUT</code></pre>
+<p>What have we done here?</p>
+<ul>
+<li><code>--gvcf</code> - input path – denotes a gzipped vcf file</li>
+<li><code>--remove-indels</code> - remove all indels (SNPs only)</li>
+<li><code>--maf</code> - set minor allele frequency - 0.1 here</li>
+<li><code>--max-missing</code> - set minimum non-missing data. A little
+counterintuitive - 0 is totally missing, 1 is none missing. Here 0.9
+means we will tolerate 10% missing data.</li>
+<li><code>--minQ</code> - this is just the minimum quality score
+required for a site to pass our filtering threshold. Here we set it to
+30.</li>
+<li><code>--min-meanDP</code> - the minimum mean depth for a site.</li>
+<li><code>--max-meanDP</code> - the maximum mean depth for a site.</li>
+<li><code>--minDP</code> - the minimum depth allowed for a
+<strong>genotype</strong> - any individual failing this threshold is
+marked as having a missing genotype.</li>
+<li><code>--maxDP</code> - the maximum depth allowed for a
+<strong>genotype</strong> - any individual failing this threshold is
+marked as having a missing genotype.</li>
+<li><code>--recode</code> - recode the output - necessary to output a
+vcf</li>
+<li><code>--stdout</code> - pipe the vcf out to the stdout (easier for
+file handling)</li>
+</ul>
+<p>Now, how many variants remain? There are two ways to examine this -
+look at the vcftools log or the same way we tried before.</p>
+<pre class="shell"><code>cat out.log
+bcftools view -H plaice_full_filtered.vcf.gz | wc -l</code></pre>
+<p>You can see we have substantially filtered our dataset!</p>
+<hr />
+<br>
+<p>
+<button type="button" class="btn btn-default btn-workflowr btn-workflowr-sessioninfo" data-toggle="collapse" data-target="#workflowr-sessioninfo" style="display: block;">
+<span class="glyphicon glyphicon-wrench" aria-hidden="true"></span>
+Session information
+</button>
+</p>
+<div id="workflowr-sessioninfo" class="collapse">
+<pre class="r"><code>sessionInfo()</code></pre>
+<pre><code>R version 4.6.0 (2026-04-24)
+Platform: aarch64-apple-darwin23
+Running under: macOS Sequoia 15.7.3
+
+Matrix products: default
+BLAS:   /Library/Frameworks/R.framework/Versions/4.6/Resources/lib/libRblas.0.dylib 
+LAPACK: /Library/Frameworks/R.framework/Versions/4.6/Resources/lib/libRlapack.dylib;  LAPACK version 3.12.1
+
+locale:
+[1] en_US.UTF-8/en_US.UTF-8/en_US.UTF-8/C/en_US.UTF-8/en_US.UTF-8
+
+time zone: Europe/Oslo
+tzcode source: internal
+
+attached base packages:
+[1] stats     graphics  grDevices utils     datasets  methods   base     
+
+other attached packages:
+[1] workflowr_1.7.2
+
+loaded via a namespace (and not attached):
+ [1] vctrs_0.7.3       httr_1.4.8        cli_3.6.6         knitr_1.51       
+ [5] rlang_1.2.0       xfun_0.57         stringi_1.8.7     otel_0.2.0       
+ [9] processx_3.9.0    promises_1.5.0    jsonlite_2.0.0    glue_1.8.1       
+[13] rprojroot_2.1.1   git2r_0.36.2      htmltools_0.5.9   httpuv_1.6.17    
+[17] sass_0.4.10       rmarkdown_2.31    jquerylib_0.1.4   tibble_3.3.1     
+[21] evaluate_1.0.5    fastmap_1.2.0     yaml_2.3.12       lifecycle_1.0.5  
+[25] whisker_0.4.1     stringr_1.6.0     compiler_4.6.0    fs_2.1.0         
+[29] pkgconfig_2.0.3   Rcpp_1.1.1-1.1    rstudioapi_0.18.0 later_1.4.8      
+[33] digest_0.6.39     R6_2.6.1          pillar_1.11.1     callr_3.7.6      
+[37] magrittr_2.0.5    bslib_0.11.0      tools_4.6.0       cachem_1.1.0     
+[41] getPass_0.2-4    </code></pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+
+
+<!-- Adjust MathJax settings so that all math formulae are shown using
+TeX fonts only; see
+https://docs.mathjax.org/en/latest/web/configuration.html. This will make
+the presentation more consistent at the cost of the webpage sometimes
+taking slightly longer to load. Note that this only works because the
+footer is added to webpages before the MathJax javascript. -->
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    "HTML-CSS": { availableFonts: ["TeX"] }
+  });
+</script>
+
+
+
+
+
+</div>
+
+<script>
+
+// add bootstrap table styles to pandoc tables
+function bootstrapStylePandocTables() {
+  $('tr.odd').parent('tbody').parent('table').addClass('table table-condensed');
+}
+$(document).ready(function () {
+  bootstrapStylePandocTables();
+});
+
+
+</script>
+
+<!-- tabsets -->
+
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+
+$(document).ready(function () {
+  $('.tabset-dropdown > .nav-tabs > li').click(function () {
+    $(this).parent().toggleClass('nav-tabs-open');
+  });
+});
+</script>
+
+<!-- code folding -->
+
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>
