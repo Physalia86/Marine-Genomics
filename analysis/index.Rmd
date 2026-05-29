@@ -29,8 +29,8 @@ This course provides a practical and conceptual introduction to marine genomics,
 
 ### Day 2
 
-- [PCA](6_pca.Rmd)
-- [Admixture](7_admixture.Rmd)
+- [PCA](6_pca.html)
+- [Admixture](7_admixture.html)
 
 ## 🧭 Course Schedule
 

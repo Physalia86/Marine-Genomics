@@ -289,7 +289,7 @@ $(document).ready(function () {
 <p>
 <button type="button" class="btn btn-default btn-workflowr btn-workflowr-report" data-toggle="collapse" data-target="#workflowr-report">
 <span class="glyphicon glyphicon-list" aria-hidden="true"></span>
-workflowr <span class="glyphicon glyphicon-ok text-success"
+workflowr <span class="glyphicon glyphicon-exclamation-sign text-danger"
 aria-hidden="true"></span>
 </button>
 </p>
@@ -300,8 +300,8 @@ aria-hidden="true"></span>
 </li>
 <li>
 <a data-toggle="tab" href="#checks"> Checks <span
-class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span>
-</a>
+class="glyphicon glyphicon-exclamation-sign text-danger"
+aria-hidden="true"></span> </a>
 </li>
 <li>
 <a data-toggle="tab" href="#versions">Past versions</a>
@@ -314,9 +314,9 @@ class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span>
 </p>
 <p>
 <strong>Checks:</strong> <span
-class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> 2
+class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> 1
 <span class="glyphicon glyphicon-exclamation-sign text-danger"
-aria-hidden="true"></span> 0
+aria-hidden="true"></span> 1
 </p>
 <p>
 <strong>Knit directory:</strong> <code>Marine-Genomics/</code> <span
@@ -339,33 +339,36 @@ versions</em> tab lists the development history.
 <div class="panel panel-default">
 <div class="panel-heading">
 <p class="panel-title">
-<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRMarkdownfilestronguptodate">
-<span class="glyphicon glyphicon-ok text-success"
-aria-hidden="true"></span> <strong>R Markdown file:</strong> up-to-date
-</a>
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRMarkdownfilestronguncommittedchanges">
+<span class="glyphicon glyphicon-exclamation-sign text-danger"
+aria-hidden="true"></span> <strong>R Markdown file:</strong> uncommitted
+changes </a>
 </p>
 </div>
-<div id="strongRMarkdownfilestronguptodate"
+<div id="strongRMarkdownfilestronguncommittedchanges"
 class="panel-collapse collapse">
 <div class="panel-body">
-<p>Great! Since the R Markdown file has been committed to the Git
-repository, you know the exact version of the code that produced these
-results.</p>
+<p>The R Markdown file has unstaged changes. To know which version of
+the R Markdown file created these results, you’ll want to first commit
+it to the Git repo. If you’re still working on the analysis, you can
+ignore this warning. When you’re finished, you can run
+<code>wflow_publish</code> to commit the R Markdown file and build the
+HTML.</p>
 </div>
 </div>
 </div>
 <div class="panel panel-default">
 <div class="panel-heading">
 <p class="panel-title">
-<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomPhysalia86MarineGenomicstree1056e8295f99420a06a058158604cb0cb9ad219btargetblank1056e82a">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomPhysalia86MarineGenomicstree605e2fdd3aa4b0d737496fd0629246de3de04edbtargetblank605e2fda">
 <span class="glyphicon glyphicon-ok text-success"
 aria-hidden="true"></span> <strong>Repository version:</strong>
-<a href="https://github.com/Physalia86/Marine-Genomics/tree/1056e8295f99420a06a058158604cb0cb9ad219b" target="_blank">1056e82</a>
+<a href="https://github.com/Physalia86/Marine-Genomics/tree/605e2fdd3aa4b0d737496fd0629246de3de04edb" target="_blank">605e2fd</a>
 </a>
 </p>
 </div>
 <div
-id="strongRepositoryversionstrongahrefhttpsgithubcomPhysalia86MarineGenomicstree1056e8295f99420a06a058158604cb0cb9ad219btargetblank1056e82a"
+id="strongRepositoryversionstrongahrefhttpsgithubcomPhysalia86MarineGenomicstree605e2fdd3aa4b0d737496fd0629246de3de04edbtargetblank605e2fda"
 class="panel-collapse collapse">
 <div class="panel-body">
 <p>
@@ -375,7 +378,7 @@ reproducibility.
 </p>
 <p>
 The results in this page were generated with repository version
-<a href="https://github.com/Physalia86/Marine-Genomics/tree/1056e8295f99420a06a058158604cb0cb9ad219b" target="_blank">1056e82</a>.
+<a href="https://github.com/Physalia86/Marine-Genomics/tree/605e2fdd3aa4b0d737496fd0629246de3de04edb" target="_blank">605e2fd</a>.
 See the <em>Past versions</em> tab to see a history of the changes made
 to the R Markdown and HTML files.
 </p>
@@ -389,12 +392,8 @@ depends on. Below is the status of the Git repository when the results
 were generated:
 </p>
 <pre><code>
-Ignored files:
-    Ignored:    .DS_Store
-
-Untracked files:
-    Untracked:  analysis/6_pca.Rmd
-    Untracked:  analysis/7_admixture.Rmd
+Unstaged changes:
+    Modified:   analysis/index.Rmd
 
 </code></pre>
 <p>
@@ -443,7 +442,7 @@ Message
 Rmd
 </td>
 <td>
-<a href="https://github.com/Physalia86/Marine-Genomics/blob/1056e8295f99420a06a058158604cb0cb9ad219b/analysis/index.Rmd" target="_blank">1056e82</a>
+<a href="https://github.com/Physalia86/Marine-Genomics/blob/605e2fdd3aa4b0d737496fd0629246de3de04edb/analysis/index.Rmd" target="_blank">605e2fd</a>
 </td>
 <td>
 markravinet
@@ -452,7 +451,7 @@ markravinet
 2026-05-29
 </td>
 <td>
-Start workflowr project.
+Fix issues
 </td>
 </tr>
 <tr>
@@ -460,16 +459,16 @@ Start workflowr project.
 html
 </td>
 <td>
-<a href="https://rawcdn.githack.com/Physalia86/Marine-Genomics/420f2e09a46706682914e244d7d17aacf0826051/docs/index.html" target="_blank">420f2e0</a>
+<a href="https://rawcdn.githack.com/Physalia86/Marine-Genomics/605e2fdd3aa4b0d737496fd0629246de3de04edb/docs/index.html" target="_blank">605e2fd</a>
 </td>
 <td>
 markravinet
 </td>
 <td>
-2026-05-26
+2026-05-29
 </td>
 <td>
-Build site.
+Fix issues
 </td>
 </tr>
 <tr>
@@ -477,16 +476,16 @@ Build site.
 html
 </td>
 <td>
-<a href="https://rawcdn.githack.com/Physalia86/Marine-Genomics/5020f8de7b022b61baafe369fcaf7f97db18a41f/docs/index.html" target="_blank">5020f8d</a>
+<a href="https://rawcdn.githack.com/Physalia86/Marine-Genomics/b6fe7c1ba55fe4931705e85d5b6c2850554baf03/docs/index.html" target="_blank">b6fe7c1</a>
 </td>
 <td>
 markravinet
 </td>
 <td>
-2026-05-25
+2026-05-29
 </td>
 <td>
-Build site.
+Fix issues
 </td>
 </tr>
 <tr>
@@ -494,7 +493,7 @@ Build site.
 Rmd
 </td>
 <td>
-<a href="https://github.com/Physalia86/Marine-Genomics/blob/1fab53f9bd07d286d7d95bc7c7228a50d9e81cb8/analysis/index.Rmd" target="_blank">1fab53f</a>
+<a href="https://github.com/Physalia86/Marine-Genomics/blob/b875ad82be8eeba44f6925ef9b363511dcdeb9fd/analysis/index.Rmd" target="_blank">b875ad8</a>
 </td>
 <td>
 markravinet
@@ -503,7 +502,24 @@ markravinet
 2026-05-25
 </td>
 <td>
-Add additional files
+Fix all day 1 resources
+</td>
+</tr>
+<tr>
+<td>
+html
+</td>
+<td>
+<a href="https://rawcdn.githack.com/Physalia86/Marine-Genomics/b875ad82be8eeba44f6925ef9b363511dcdeb9fd/docs/index.html" target="_blank">b875ad8</a>
+</td>
+<td>
+markravinet
+</td>
+<td>
+2026-05-25
+</td>
+<td>
+Fix all day 1 resources
 </td>
 </tr>
 <tr>
@@ -511,7 +527,7 @@ Add additional files
 Rmd
 </td>
 <td>
-<a href="https://github.com/Physalia86/Marine-Genomics/blob/cb418ffa50dc808463e57e7f51cb7dc73a5cca2f/analysis/index.Rmd" target="_blank">cb418ff</a>
+<a href="https://github.com/Physalia86/Marine-Genomics/blob/e65e61ef3306807873c7e2816224840fca83be7e/analysis/index.Rmd" target="_blank">e65e61e</a>
 </td>
 <td>
 markravinet
@@ -520,7 +536,24 @@ markravinet
 2026-05-25
 </td>
 <td>
-Start workflowr project.
+Create course website
+</td>
+</tr>
+<tr>
+<td>
+html
+</td>
+<td>
+<a href="https://rawcdn.githack.com/Physalia86/Marine-Genomics/e65e61ef3306807873c7e2816224840fca83be7e/docs/index.html" target="_blank">e65e61e</a>
+</td>
+<td>
+markravinet
+</td>
+<td>
+2026-05-25
+</td>
+<td>
+Create course website
 </td>
 </tr>
 </tbody>
@@ -556,8 +589,8 @@ reference genome</a></li>
 <div id="day-2" class="section level3">
 <h3>Day 2</h3>
 <ul>
-<li><a href="6_pca.Rmd">PCA</a></li>
-<li><a href="7_admixture.Rmd">Admixture</a></li>
+<li><a href="6_pca.html">PCA</a></li>
+<li><a href="7_admixture.html">Admixture</a></li>
 </ul>
 </div>
 </div>
