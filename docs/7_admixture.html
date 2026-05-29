@@ -11,7 +11,7 @@
 
 
 
-<title>Marine Genomics 2026</title>
+<title>Population structure: PCA</title>
 
 <script src="site_libs/header-attrs-2.31/header-attrs.js"></script>
 <script src="site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
@@ -281,7 +281,7 @@ $(document).ready(function () {
 
 
 
-<h1 class="title toc-ignore">Marine Genomics 2026</h1>
+<h1 class="title toc-ignore">Population structure: PCA</h1>
 
 </div>
 
@@ -289,7 +289,7 @@ $(document).ready(function () {
 <p>
 <button type="button" class="btn btn-default btn-workflowr btn-workflowr-report" data-toggle="collapse" data-target="#workflowr-report">
 <span class="glyphicon glyphicon-list" aria-hidden="true"></span>
-workflowr <span class="glyphicon glyphicon-ok text-success"
+workflowr <span class="glyphicon glyphicon-exclamation-sign text-danger"
 aria-hidden="true"></span>
 </button>
 </p>
@@ -300,8 +300,8 @@ aria-hidden="true"></span>
 </li>
 <li>
 <a data-toggle="tab" href="#checks"> Checks <span
-class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span>
-</a>
+class="glyphicon glyphicon-exclamation-sign text-danger"
+aria-hidden="true"></span> </a>
 </li>
 <li>
 <a data-toggle="tab" href="#versions">Past versions</a>
@@ -314,9 +314,9 @@ class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span>
 </p>
 <p>
 <strong>Checks:</strong> <span
-class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> 2
+class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> 1
 <span class="glyphicon glyphicon-exclamation-sign text-danger"
-aria-hidden="true"></span> 0
+aria-hidden="true"></span> 1
 </p>
 <p>
 <strong>Knit directory:</strong> <code>Marine-Genomics/</code> <span
@@ -339,18 +339,21 @@ versions</em> tab lists the development history.
 <div class="panel panel-default">
 <div class="panel-heading">
 <p class="panel-title">
-<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRMarkdownfilestronguptodate">
-<span class="glyphicon glyphicon-ok text-success"
-aria-hidden="true"></span> <strong>R Markdown file:</strong> up-to-date
-</a>
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRMarkdownfilestronguncommittedchanges">
+<span class="glyphicon glyphicon-exclamation-sign text-danger"
+aria-hidden="true"></span> <strong>R Markdown file:</strong> uncommitted
+changes </a>
 </p>
 </div>
-<div id="strongRMarkdownfilestronguptodate"
+<div id="strongRMarkdownfilestronguncommittedchanges"
 class="panel-collapse collapse">
 <div class="panel-body">
-<p>Great! Since the R Markdown file has been committed to the Git
-repository, you know the exact version of the code that produced these
-results.</p>
+<p>The R Markdown is untracked by Git. To know which version of the R
+Markdown file created these results, you’ll want to first commit it to
+the Git repo. If you’re still working on the analysis, you can ignore
+this warning. When you’re finished, you can run
+<code>wflow_publish</code> to commit the R Markdown file and build the
+HTML.</p>
 </div>
 </div>
 </div>
@@ -410,239 +413,124 @@ have uncommitted changes.
 </div>
 <div id="versions" class="tab-pane fade">
 <p>
-These are the previous versions of the repository in which changes were
-made to the R Markdown (<code>analysis/index.Rmd</code>) and HTML
-(<code>docs/index.html</code>) files. If you’ve configured a remote Git
-repository (see <code>?wflow_git_remote</code>), click on the hyperlinks
-in the table below to view the files as they were in that past version.
+There are no past versions. Publish this analysis with
+<code>wflow_publish()</code> to start tracking its development.
 </p>
-<div class="table-responsive">
-<table class="table table-condensed table-hover">
-<thead>
-<tr>
-<th>
-File
-</th>
-<th>
-Version
-</th>
-<th>
-Author
-</th>
-<th>
-Date
-</th>
-<th>
-Message
-</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>
-Rmd
-</td>
-<td>
-<a href="https://github.com/Physalia86/Marine-Genomics/blob/1056e8295f99420a06a058158604cb0cb9ad219b/analysis/index.Rmd" target="_blank">1056e82</a>
-</td>
-<td>
-markravinet
-</td>
-<td>
-2026-05-29
-</td>
-<td>
-Start workflowr project.
-</td>
-</tr>
-<tr>
-<td>
-html
-</td>
-<td>
-<a href="https://rawcdn.githack.com/Physalia86/Marine-Genomics/420f2e09a46706682914e244d7d17aacf0826051/docs/index.html" target="_blank">420f2e0</a>
-</td>
-<td>
-markravinet
-</td>
-<td>
-2026-05-26
-</td>
-<td>
-Build site.
-</td>
-</tr>
-<tr>
-<td>
-html
-</td>
-<td>
-<a href="https://rawcdn.githack.com/Physalia86/Marine-Genomics/5020f8de7b022b61baafe369fcaf7f97db18a41f/docs/index.html" target="_blank">5020f8d</a>
-</td>
-<td>
-markravinet
-</td>
-<td>
-2026-05-25
-</td>
-<td>
-Build site.
-</td>
-</tr>
-<tr>
-<td>
-Rmd
-</td>
-<td>
-<a href="https://github.com/Physalia86/Marine-Genomics/blob/1fab53f9bd07d286d7d95bc7c7228a50d9e81cb8/analysis/index.Rmd" target="_blank">1fab53f</a>
-</td>
-<td>
-markravinet
-</td>
-<td>
-2026-05-25
-</td>
-<td>
-Add additional files
-</td>
-</tr>
-<tr>
-<td>
-Rmd
-</td>
-<td>
-<a href="https://github.com/Physalia86/Marine-Genomics/blob/cb418ffa50dc808463e57e7f51cb7dc73a5cca2f/analysis/index.Rmd" target="_blank">cb418ff</a>
-</td>
-<td>
-markravinet
-</td>
-<td>
-2026-05-25
-</td>
-<td>
-Start workflowr project.
-</td>
-</tr>
-</tbody>
-</table>
-</div>
 <hr>
 </div>
 </div>
 </div>
-<div id="marine-genomics-course" class="section level1">
-<h1>Marine Genomics Course</h1>
-<p>Welcome to the <strong>Marine Genomics</strong> course website</p>
-<p>This course provides a practical and conceptual introduction to
-marine genomics, from genome resources to population and seascape
-genomics, with a strong emphasis on hands-on data analysis using
-real-world datasets.</p>
-<hr />
-<div id="course-resources" class="section level2">
-<h2>Course resources</h2>
-<div id="day-1" class="section level3">
-<h3>Day 1</h3>
-<ul>
-<li><a href="0_Logging_on.html">How to log on</a></li>
-<li><a href="1_exploring_raw_reads.html">Exploring raw reads</a></li>
-<li><a href="2_fastp_filtering_reads.html">Filtering reads with
-fastp</a></li>
-<li><a href="3_mapping_to_a_reference_genome.html">Mapping to a
-reference genome</a></li>
-<li><a href="4_variant_calling.html">Variant calling</a></li>
-<li><a href="5_filtering_variants.html">Filtering variants</a></li>
-</ul>
-</div>
-<div id="day-2" class="section level3">
-<h3>Day 2</h3>
-<ul>
-<li><a href="6_pca.Rmd">PCA</a></li>
-<li><a href="7_admixture.Rmd">Admixture</a></li>
-</ul>
-</div>
-</div>
-<div id="course-schedule" class="section level2">
-<h2>🧭 Course Schedule</h2>
-<div id="day-1-introduction-to-marine-genomics-genome-resources"
-class="section level3">
-<h3>Day 1 — Introduction to Marine Genomics &amp; Genome Resources</h3>
-<p><strong>1:00–6:00 PM (Berlin time)</strong></p>
-<ul>
-<li>Course overview and introductions<br />
-</li>
-<li>Introduction to marine genomics: opportunities and challenges<br />
-</li>
-<li>Sequencing technologies and data analysis</li>
-</ul>
-<p><strong>Hands-on session:</strong> - Exploring genome
-assemblies<br />
-- Downloading and assessing genomes (BUSCO, QUAST, etc.)<br />
-- Checking genome annotations (GFF files)<br />
-- Evaluating reference genome quality (size, masked/unmasked regions,
-completeness, usability considerations)</p>
-<hr />
-</div>
-<div id="day-2-sequencing-data-processing-and-variant-calling"
-class="section level3">
-<h3>Day 2 — Sequencing Data Processing and Variant Calling</h3>
-<p><strong>1:00–6:00 PM (Berlin time)</strong></p>
-<ul>
-<li>Read alignment and genome references<br />
-</li>
-<li>Variant calling pipelines (SNPs/indels)<br />
-</li>
-<li>Filtering and preparation of datasets for downstream analyses</li>
-</ul>
-<p><strong>Hands-on session:</strong> - Quality control, trimming, and
-mapping of NGS data<br />
-- Practical variant calling workflows</p>
-<hr />
-</div>
-<div id="day-3-population-genomics-approaches" class="section level3">
-<h3>Day 3 — Population Genomics Approaches</h3>
-<p><strong>1:00–6:00 PM (Berlin time)</strong></p>
-<ul>
-<li>Introduction to population genomics concepts<br />
-</li>
-<li>Genetic diversity, population structure, and demographic
-inference</li>
-</ul>
-<p><strong>Hands-on session:</strong> - Population genomics analyses
-using marine datasets</p>
-<hr />
-</div>
-<div
-id="day-4-seascape-genomics-linking-genomics-with-environmental-data"
-class="section level3">
-<h3>Day 4 — Seascape Genomics: Linking Genomics with Environmental
-Data</h3>
-<p><strong>1:00–6:00 PM (Berlin time)</strong></p>
-<ul>
-<li>Environmental data collection and key parameters<br />
-</li>
-<li>Data integration for seascape genomics<br />
-</li>
-<li>Case studies in marine systems</li>
-</ul>
-<p><strong>Hands-on session:</strong> - Working with environmental
-datasets</p>
-<hr />
-</div>
-<div id="day-5-integrative-analyses-environmentgenomics-associations"
-class="section level3">
-<h3>Day 5 — Integrative Analyses: Environment–Genomics Associations</h3>
-<p><strong>1:00–6:00 PM (Berlin time)</strong></p>
-<ul>
-<li>Statistical approaches linking genomic variation and
-environment<br />
-</li>
-<li>Seascape genomics models and tools</li>
-</ul>
-<p><strong>Hands-on session:</strong> - Association analyses<br />
-- Interpretation and discussion of results</p>
-<hr />
-</div>
-</div>
+<p><code>ADMIXTURE</code> is a clustering software similar to
+<code>STRUCTURE</code> with the aim to infer populations and individual
+ancestries. You can find the manual <a
+href="http://software.genetics.ucla.edu/admixture/admixture-manual.pdf">here</a>.</p>
+<div id="generating-the-input-file" class="section level2">
+<h2>Generating the input file</h2>
+<p><code>ADMIXTURE</code> requires unlinked (i.e. LD-pruned) SNPs in
+plink format. See the <a
+href="https://github.com/speciationgenomics/presentations/blob/master/ADMIXTURE.pdf">slides</a>
+for additional requirements. It is very easy to generate the input file
+from a VCF containing such SNPs. In fact, we already did this in the
+last session when we made a dataset for our PCA!</p>
+<pre class="shell"><code>
+# Make a directory in the home directory
+cd ~
+mkdir admix
+cd admix
+cp ../plink/plaice.[bf]* .</code></pre>
+<p>One of the problems we have here is that <code>ADMIXTURE</code> will
+not recognise non-numeric chromosome names. To solve this we can use
+some awk code (generated with ChatGPT):</p>
+<pre class="shell"><code>awk &#39;
+BEGIN { OFS = &quot;\t&quot; }
+{
+  if (!($1 in chrmap)) {
+    chrmap[$1] = ++n
+  }
+  $1 = chrmap[$1]
+  print
+}
+&#39; plaice.bim &gt; plaice_numeric.bim</code></pre>
+<p>However, the program also assumes that we have all the
+<code>plink</code> input here. So we need to rename it:</p>
+<pre class="shell"><code>mv plaice_numeric.bim plaice.bim</code></pre>
+<p>Now, we are ready to run <code>ADMIXTURE</code>. We will run it with
+cross-validation (the default is 5-fold CV, for higher, choose
+e.g. <code>cv=10</code>) and <code>K=2</code>.</p>
+<pre class="shell"><code>admixture --cv plaice.bed 2 &gt; log2.out</code></pre>
+<p><code>ADMIXTURE</code> produced 2 files: <code>.Q</code> which
+contains cluster assignments for each individual and <code>.P</code>
+which contains for each SNP the population allele frequencies.</p>
+<p>Let’s now run it in a for loop with <code>K=3</code> to
+<code>K=5</code> and direct the output into log files</p>
+<pre class="shell"><code>for k in {1..5}; do echo $k; admixture --cv plaice.bed $k | tee log_${k}.out; done</code></pre>
+<p>To identify the best value of k clusters which is the value with
+lowest cross-validation error, we need to collect the cv errors. Below
+are three different ways to extract the number of <code>K</code> and the
+<code>CV</code> error for each corresponding <code>K</code>. Like we
+said at the start of the course, there are many ways to achieve the same
+thing in bioinformatics!</p>
+<pre class="shell"><code>grep &quot;CV&quot; log_?.out | cut -f 4 -d &quot; &quot; &gt; cv_error.txt</code></pre>
+<p>Now we are ready to plot the results in <code>R</code>. In order to
+do this, we need also need the <code>plaice_metadata.csv</code>
+file.</p>
+<p>First we load the libraries:</p>
+<pre class="r"><code># load packages
+library(tidyverse)</code></pre>
+<p>Then we set the paths and read in the files.</p>
+<pre class="r"><code># set paths
+metadata_path &lt;- &quot;./plaice_metadata.csv&quot;
+q_path &lt;- &quot;./plaice_prune_mac_2_numeric.2.Q&quot; 
+
+# calc q value
+k &lt;- q_path %&gt;% basename %&gt;% str_split(&quot;\\.&quot;) %&gt;% map_chr(2) %&gt;% as.numeric()
+
+# read in files
+metadata &lt;- read_csv(metadata_path, col_names = c(&quot;id&quot;, &quot;pop&quot;, &quot;year&quot;, &quot;sex&quot;))
+q_data &lt;- read_delim(q_path, col_names = paste0(&quot;Q&quot;, seq(1:k)))</code></pre>
+<p>Next we need to combine the data and <a
+href="https://tidyr.tidyverse.org/articles/pivot.html">pivot</a> it in
+order to make it plotable.</p>
+<pre class="shell"><code># combine data
+admix &lt;- bind_cols(metadata, q_data)
+
+# need to pivot data to make it plottable in ggplot
+admix_pivot &lt;- admix %&gt;% 
+  pivot_longer(c(&quot;Q1&quot;, &quot;Q2&quot;), names_to = &quot;Q&quot;)</code></pre>
+<p>With this done, we can plot our data - here we are plotting the Q
+values - i.e. the assigned proportions of each individual to the k
+clusters.</p>
+<pre class="shell"><code># make a plot
+ggplot(admix_pivot, aes(x = id, y = value, fill = factor(Q))) + 
+  geom_bar(stat = &quot;identity&quot;, position = &quot;stack&quot;) +
+  xlab(&quot;Sample&quot;) + ylab(&quot;Ancestry&quot;) +
+  theme_bw() +
+  theme(axis.text.x = element_text(angle = 60, hjust = 1)) +
+  scale_fill_brewer(palette= &quot;Set1&quot;, name = &quot;K&quot;,
+                    labels = c(&quot;1&quot;, &quot;2&quot;))</code></pre>
+<p>We can make our plot a bit clearer by adding a facet for
+populations.</p>
+<pre class="shell"><code># sort plots by pops
+ggplot(admix_pivot, aes(x = id, y = value, fill = factor(Q))) + 
+  geom_bar(stat = &quot;identity&quot;, position = &quot;stack&quot;) +
+  xlab(&quot;Sample&quot;) + ylab(&quot;Ancestry&quot;) +
+  facet_grid(~pop, scales = &quot;free&quot;) +
+  theme_bw() +
+  theme(axis.text.x = element_blank()) +
+  scale_fill_brewer(palette= &quot;Set1&quot;, name = &quot;K&quot;,
+                    labels = c(&quot;1&quot;, &quot;2&quot;))
+</code></pre>
+<p>Remember that ADMIXTURE/STRUCTURE plots can be quite misleading as
+different demographic histories can lead to the same results (see.
+e.g. <a href="https://www.nature.com/articles/s41467-018-05257-7">Lawson
+et al, 2018</a>) These plots are great to detect recent hybrids but they
+are not ideal to infer complex demographic histories with hybrid origins
+of entire populations</p>
+<p>To evaluate if the ADMIXTURE plot is a good fit, you can use <a
+href="http://www.popgen.dk/software/index.php/EvalAdmix">evaladmix</a>
+and we highly recommend to also use other methods to help infer the
+demographic history and evidence of hybridisation such as Dstatistics,
+demographic modeling etc.</p>
 </div>
 </div>
 </div>

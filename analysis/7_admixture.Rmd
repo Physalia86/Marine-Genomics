@@ -1,0 +1,137 @@
+---
+title: "Population structure: PCA"
+site: workflowr::wflow_site
+output:
+  workflowr::wflow_html:
+    toc: false
+editor_options:
+  chunk_output_type: console
+---
+
+`ADMIXTURE` is a clustering software similar to `STRUCTURE` with the aim to infer populations and individual ancestries.
+You can find the manual [here](http://software.genetics.ucla.edu/admixture/admixture-manual.pdf).
+
+## Generating the input file
+
+`ADMIXTURE` requires unlinked (i.e. LD-pruned) SNPs in plink format. See the [slides](https://github.com/speciationgenomics/presentations/blob/master/ADMIXTURE.pdf) for additional requirements. 
+It is very easy to generate the input file from a VCF containing such SNPs. In fact, we already did this in the last session when we made a dataset for our PCA! 
+
+```shell
+
+# Make a directory in the home directory
+cd ~
+mkdir admix
+cd admix
+cp ../plink/plaice.[bf]* .
+```
+
+One of the problems we have here is that `ADMIXTURE` will not recognise non-numeric chromosome names. To solve this we can use some
+awk code (generated with ChatGPT):
+
+```shell
+awk '
+BEGIN { OFS = "\t" }
+{
+  if (!($1 in chrmap)) {
+    chrmap[$1] = ++n
+  }
+  $1 = chrmap[$1]
+  print
+}
+' plaice.bim > plaice_numeric.bim
+```
+
+However, the program also assumes that we have all the `plink` input here. So we need to rename it:
+
+```shell
+mv plaice_numeric.bim plaice.bim
+```
+
+Now, we are ready to run `ADMIXTURE`. We will run it with cross-validation (the default is 5-fold CV, for higher, choose e.g. `cv=10`) and `K=2`.
+
+```shell
+admixture --cv plaice.bed 2 > log2.out
+```
+
+`ADMIXTURE` produced 2 files: `.Q` which contains cluster assignments for each individual and `.P` which contains for each SNP the population allele frequencies.
+
+Let's now run it in a for loop with `K=3` to `K=5` and direct the output into log files
+
+```shell
+for k in {1..5}; do echo $k; admixture --cv plaice.bed $k | tee log_${k}.out; done
+```
+
+To identify the best value of k clusters which is the value with lowest cross-validation error, we need to collect the cv errors. Below are three different ways to extract the number of `K` and the `CV` error for each corresponding `K`. Like we said at the start of the course, there are many ways to achieve the same thing in bioinformatics!
+
+```shell
+grep "CV" log_?.out | cut -f 4 -d " " > cv_error.txt
+```
+
+Now we are ready to plot the results in `R`. In order to do this, we need also need the `plaice_metadata.csv` file.
+
+First we load the libraries:
+
+```R
+# load packages
+library(tidyverse)
+```
+
+Then we set the paths and read in the files. 
+
+```R
+# set paths
+metadata_path <- "./plaice_metadata.csv"
+q_path <- "./plaice_prune_mac_2_numeric.2.Q" 
+
+# calc q value
+k <- q_path %>% basename %>% str_split("\\.") %>% map_chr(2) %>% as.numeric()
+
+# read in files
+metadata <- read_csv(metadata_path, col_names = c("id", "pop", "year", "sex"))
+q_data <- read_delim(q_path, col_names = paste0("Q", seq(1:k)))
+```
+
+Next we need to combine the data and [pivot](https://tidyr.tidyverse.org/articles/pivot.html) it in order to make it plotable. 
+
+```shell
+# combine data
+admix <- bind_cols(metadata, q_data)
+
+# need to pivot data to make it plottable in ggplot
+admix_pivot <- admix %>% 
+  pivot_longer(c("Q1", "Q2"), names_to = "Q")
+```
+
+With this done, we can plot our data - here we are plotting the Q values - i.e. the assigned proportions of each individual to the k clusters.
+
+```shell
+# make a plot
+ggplot(admix_pivot, aes(x = id, y = value, fill = factor(Q))) + 
+  geom_bar(stat = "identity", position = "stack") +
+  xlab("Sample") + ylab("Ancestry") +
+  theme_bw() +
+  theme(axis.text.x = element_text(angle = 60, hjust = 1)) +
+  scale_fill_brewer(palette= "Set1", name = "K",
+                    labels = c("1", "2"))
+```
+
+We can make our plot a bit clearer by adding a facet for populations. 
+  
+```shell
+# sort plots by pops
+ggplot(admix_pivot, aes(x = id, y = value, fill = factor(Q))) + 
+  geom_bar(stat = "identity", position = "stack") +
+  xlab("Sample") + ylab("Ancestry") +
+  facet_grid(~pop, scales = "free") +
+  theme_bw() +
+  theme(axis.text.x = element_blank()) +
+  scale_fill_brewer(palette= "Set1", name = "K",
+                    labels = c("1", "2"))
+
+```
+
+
+
+Remember that ADMIXTURE/STRUCTURE plots can be quite misleading as different demographic histories can lead to the same results (see. e.g. [Lawson et al, 2018](https://www.nature.com/articles/s41467-018-05257-7)) These plots are great to detect recent hybrids but they are not ideal to infer complex demographic histories with hybrid origins of entire populations
+
+To evaluate if the ADMIXTURE plot is a good fit, you can use [evaladmix](http://www.popgen.dk/software/index.php/EvalAdmix) and we highly recommend to also use other methods to help infer the demographic history and evidence of hybridisation such as Dstatistics, demographic modeling etc.
